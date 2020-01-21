@@ -3,8 +3,10 @@ import HomePage from "./pages/Homepage/Homepage.jsx";
 import Shop from "./pages/Shop/Shop.jsx";
 import Header from "./components/Header/Header.jsx";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import { connect } from "react-redux";
 import SignInAndSignUp from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.jsx";
 import { Switch, Route } from "react-router-dom";
+import { setCurrentUser } from "./redux/user/userActions";
 import "./App.css";
 
 class App extends React.Component {
@@ -17,11 +19,12 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
         userRef.onSnapshot(snapShot => {
-          this.setState({
+          setCurrentUser({
             currentUser: {
               id: snapShot.id,
               ...snapShot.data()
@@ -29,7 +32,7 @@ class App extends React.Component {
           });
         });
       } else {
-        this.setState({ currentUser: userAuth });
+        setCurrentUser(userAuth);
       }
     });
   }
@@ -51,5 +54,7 @@ class App extends React.Component {
     );
   }
 }
-
-export default App;
+const mapDispatchToProps = {
+  setCurrentUser
+};
+export default connect(null, mapDispatchToProps)(App);
