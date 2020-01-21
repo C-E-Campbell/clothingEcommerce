@@ -5,7 +5,7 @@ import { auth } from "../../firebase/firebase.utils";
 import { connect } from "react-redux";
 import { ReactComponent as Logo } from "../../Assets/crown.svg";
 
-const Header = ({ user }) => {
+const Header = ({ currentUser }) => {
   return (
     <header className="header">
       <Link className="logo-container" to="/">
@@ -18,13 +18,13 @@ const Header = ({ user }) => {
         <Link className="option" to="/contact">
           Contact
         </Link>
-        {user ? (
+        {currentUser ? (
           <div className="option" onClick={() => auth.signOut()}>
             Sign Out
           </div>
         ) : (
           <Link className="option" to="/signin">
-            Sign IN
+            Sign In
           </Link>
         )}
       </div>
