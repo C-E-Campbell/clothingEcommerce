@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import DropDownCart from "../DropDownCart/DropDownCart";
 import { ReactComponent as Logo } from "../../Assets/crown.svg";
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, cartStatus }) => {
   return (
     <header className="header">
       <Link className="logo-container" to="/">
@@ -29,15 +29,17 @@ const Header = ({ currentUser }) => {
             Sign In
           </Link>
         )}
+
         <CartIcon />
       </div>
-      <DropDownCart />
+      {cartStatus ? null : <DropDownCart />}
     </header>
   );
 };
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  cartStatus: state.cart.cartStatus
 });
 
 export default connect(mapStateToProps)(Header);
